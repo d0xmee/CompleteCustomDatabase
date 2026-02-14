@@ -1,79 +1,68 @@
-<div align="center">
-  <h1>⚡ CompleteCustomDatabase</h1>
-  <p><strong>A lightweight, embeddable key-value storage engine with LSM-tree architecture</strong></p>
-  
-  <!-- Badges -->
-  <p>
-    <img src="https://img.shields.io/badge/C%2B%2B-17-blue?style=for-the-badge&logo=c%2B%2B" alt="C++17">
-    <img src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge&logo=opensourceinitiative" alt="MIT License">
-    <img src="https://img.shields.io/badge/version-1.0.0-orange?style=for-the-badge&logo=semver" alt="Version 1.0.0">
-    <img src="https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge&logo=githubactions" alt="Build Passing">
-  </p>
-  
-  <p>
-    <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows">
-    <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Linux">
-    <img src="https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white" alt="macOS">
-  </p>
-  
-  <p>
-    <a href="https://github.com/d0xmee/CompleteCustomDatabase">
-      <img src="https://img.shields.io/badge/GitHub-d0xmee-181717?style=for-the-badge&logo=github" alt="GitHub">
-    </a>
-  </p>
-</div>
-
----
-
-## 📋 Table of Contents
-- [About The Project](#-about-the-project)
-- [Features](#-features)
-
----
-
-## 🎯 About The Project
-
-**CompleteCustomDatabase** is a high-performance, embeddable key-value store inspired by Google's LevelDB and Facebook's RocksDB. It implements an LSM-tree (Log-Structured Merge-Tree) architecture that optimizes write operations while maintaining efficient reads.
-
-### Why this project?
-- 💡 **Learn by doing**: Understand how modern databases work internally
-- ⚡ **Performance**: Optimized for write-heavy workloads
-- 🔧 **Embeddable**: Link directly to your C++ applications
-- 🎓 **Educational**: Clean codebase perfect for learning systems programming
-
----
-
-## 🛠️ Tech Stack
-
-| Category | Technologies |
-|----------|-------------|
-| **Languages** | ![C++](https://img.shields.io/badge/C++-17-00599C?style=flat-square&logo=c%2B%2B) |
-| **Frameworks & Libraries** | ![STL](https://img.shields.io/badge/STL-C++%20Standard%20Library-004482?style=flat-square) ![CMake](https://img.shields.io/badge/CMake-3.15-064F8C?style=flat-square&logo=cmake) |
-| **Platforms** | ![Windows](https://img.shields.io/badge/Windows-10%2F11-0078D6?style=flat-square&logo=windows) ![Linux](https://img.shields.io/badge/Linux-Ubuntu%2FDebian-FCC624?style=flat-square&logo=linux) ![macOS](https://img.shields.io/badge/macOS-10.15%2B-000000?style=flat-square&logo=apple) |
-| **Tools** | ![Visual Studio](https://img.shields.io/badge/Visual%20Studio-2022-5C2D91?style=flat-square&logo=visualstudio) ![CLion](https://img.shields.io/badge/CLion-2023.3-000000?style=flat-square&logo=clion) ![VSCode](https://img.shields.io/badge/VSCode-1.85-007ACC?style=flat-square&logo=visualstudiocode) ![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git) |
-| **CI/CD** | ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat-square&logo=githubactions) |
-
----
-
 ## ✨ Features
 
-### Core Features
-- ✅ **Key-Value Storage**: Simple put/get/delete operations
-- ✅ **LSM-Tree Architecture**: MemTable + SSTables for efficient writes
-- ✅ **WAL (Write-Ahead Log)**: Durability guarantee, crash recovery
-- ✅ **Compaction**: Automatic background merging of SSTables
-- ✅ **Thread-Safe**: Mutex-protected operations
-- ✅ **Memory-Efficient**: Configurable MemTable size
-- ✅ **Persistent Storage**: Data survives program restarts
-- ✅ **No External Dependencies**: Pure C++17 with STL
+CompleteCustomDatabase is packed with features designed for performance, reliability, and ease of use. Below is a comprehensive breakdown of its capabilities.
 
-### Key Benefits
+### 🔧 Core Engine Features
+- **🗃️ LSM-Tree Architecture**: Implements a production-grade Log-Structured Merge-Tree, providing superior write performance by converting random writes into sequential disk writes.
+- **📝 Write-Ahead Logging (WAL)**: Ensures durability with a pre-write logging mechanism. Every write operation is first recorded in the WAL, guaranteeing zero data loss during crashes or power failures.
+- **⚡ Multi-Level Compaction**: Automatic background compaction process that continuously merges SSTables, controls read amplification, and reclaims disk space from deleted/overwritten data.
+- **🔍 Efficient Point Lookups**: Optimized read path that checks MemTable → Immutable MemTable → SSTable levels (with binary search within each level) for fast key retrieval.
+- **🧠 SkipList MemTable**: In-memory storage using a thread-safe, lock-free SkipList implementation, offering O(log n) complexity for both reads and writes.
+- **📊 Bloom Filters (Optional)**: Built-in support for Bloom filters to quickly determine if a key definitely does not exist in an SSTable, significantly reducing unnecessary disk I/O for non-existent keys.
+- **🗜️ Configurable Block Compression**: Support for optional compression algorithms (e.g., Snappy) for SSTable blocks, reducing disk space usage at the cost of minimal CPU overhead.
 
-| Benefit | Description |
-|---------|-------------|
-| ⚡ **Lightning Fast** | Optimized write performance with LSM-tree |
-| 🛡️ **Crash Recovery** | WAL guarantees no data loss |
-| 🔄 **Auto Compaction** | Self-maintaining storage |
-| 🔒 **Thread Safe** | Mutex-protected operations |
-| ⚙️ **Configurable** | Adjust MemTable size, thresholds |
-| 📦 **Embeddable** | No external dependencies |
+### 🔐 Concurrency & Safety
+- **🧵 Fully Thread-Safe**: All public API operations (`Put`, `Get`, `Delete`) are protected by fine-grained mutexes, allowing safe concurrent access from multiple threads without data corruption.
+- **🔄 Iterator Support**: Provides a consistent, forward-only iterator interface to traverse key-value pairs across the entire database or within a specific key range.
+- **💾 Snapshot Isolation**: Create read-consistent snapshots of the database at a point in time, allowing long-running read operations without blocking writes.
+
+### ⚙️ Configuration & Flexibility
+- **📏 Tunable Performance**: Adjust critical parameters to match your workload:
+  - `memtable_size`: Control memory usage and flush frequency.
+  - `compaction_threshold`: Configure when background compaction triggers.
+  - `block_size`: Optimize for point lookups vs. range scans.
+  - `wal_enabled`: Toggle durability for maximum write speed (trade-off: crash safety).
+- **🗂️ Custom Key Comparator**: Support for custom key comparison functions, enabling advanced use cases like composite keys or custom sorting orders.
+
+### 🛠️ Operational Excellence
+- **🔄 Crash Recovery**: On startup, automatically replays the WAL to rebuild the MemTable, ensuring data integrity after unexpected shutdowns.
+- **📈 Performance Metrics**: Built-in statistics counters (e.g., number of compactions, cache hits/misses, write amplification) for monitoring and tuning.
+- **🧹 Manual Compaction Trigger**: Force immediate compaction of all SSTables or a specific key range for testing or maintenance purposes.
+- **💼 Batch Operations**: Atomic batch writes (`WriteBatch`) for multiple `Put`/`Delete` operations, ensuring all or nothing semantics.
+
+### 📦 Developer Experience
+- **🎯 Zero External Dependencies**: Pure C++17 implementation using only the Standard Template Library (STL) – no Boost, no third-party libraries.
+- **📚 Clean, Documented Codebase**: Well-commented source code with clear separation of concerns, perfect for learning or production use.
+- **✅ Comprehensive Testing**: Extensive unit tests covering edge cases (compaction corner cases, recovery scenarios, concurrent access patterns).
+- **🔧 Easy Integration**: Simple header includes and a CMake build system – just link and start using.
+
+### 🌐 Platform Compatibility
+- **🪟 Windows**: Full support with Visual Studio 2022 and MinGW.
+- **🐧 Linux**: Tested on Ubuntu 20.04+, Debian, CentOS with GCC and Clang.
+- **🍎 macOS**: Compatible with macOS 10.15+ (Catalina) and newer, Apple Silicon support.
+
+---
+
+### 📊 Performance Characteristics
+
+| Operation | Average Complexity | Description |
+|-----------|-------------------|-------------|
+| **Put**   | O(log n) | Write to MemTable + append to WAL |
+| **Get (existing key)** | O(log n) average | Search MemTable → Immutable → SSTables |
+| **Get (non-existent)** | O(1) with Bloom filter | Quick rejection without disk I/O |
+| **Delete** | O(log n) | Write a tombstone entry (lazy deletion) |
+| **Range Scan** | O(n + log m) | Efficient forward iteration across levels |
+
+---
+
+### 🎯 Use Cases
+
+CompleteCustomDatabase excels in scenarios where:
+
+- **Write-heavy workloads**: Applications with high insert/update rates (e.g., time-series data, log aggregation).
+- **Embedded systems**: Need a lightweight database without external process overhead.
+- **Prototyping & Learning**: Understanding how real-world storage engines work under the hood.
+- **IoT applications**: Resource-constrained environments requiring persistent key-value storage.
+- **Caching layers**: Persistent cache with LRU-like behavior (via manual deletion or compaction).
+
+> ⚡ **Performance Tip**: For maximum write throughput, disable the WAL (`wal_enabled = false`) – but remember, you lose crash recovery guarantees!
