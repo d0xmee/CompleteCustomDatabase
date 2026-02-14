@@ -29,15 +29,6 @@
 - [About The Project](#-about-the-project)
 - [Tech Stack](#-tech-stack)
 - [Features](#-features)
-- [Architecture](#-architecture)
-- [Getting Started](#-getting-started)
-- [Usage Examples](#-usage-examples)
-- [API Reference](#-api-reference)
-- [Configuration](#-configuration)
-- [Performance](#-performance)
-- [Roadmap](#-roadmap)
-- [License](#-license)
-- [Contact](#-contact)
 
 ---
 
@@ -87,7 +78,3 @@
 | 🔒 **Thread Safe** | Mutex-protected operations |
 | ⚙️ **Configurable** | Adjust MemTable size, thresholds |
 | 📦 **Embeddable** | No external dependencies |
-
----
-
-## 🏗️ Architecture
