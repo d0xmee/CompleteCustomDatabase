@@ -27,7 +27,6 @@
 
 ## 📋 Table of Contents
 - [About The Project](#-about-the-project)
-- [Tech Stack](#-tech-stack)
 - [Features](#-features)
 
 ---
